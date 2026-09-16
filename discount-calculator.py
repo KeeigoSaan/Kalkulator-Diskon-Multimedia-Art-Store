@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
+from pathlib import Path
+from PIL import Image, ImageTk
+
 
 def calculate_discount():
     try:
@@ -48,14 +51,31 @@ def calculate_discount():
     except ValueError:
         messagebox.showerror("Error", "Masukkan nominal belanja yang valid!")
 
+
 # Window Utama
 root = tk.Tk()
-root.title("Multimedia Art Store Calculator")
+root.title("Store Calculator")
 root.geometry("420x450")
-root.resizable(False, False)
+root.minsize(420, 450)
+root.resizable(True, True)
+
+def toggle_fullscreen(event=None):
+    root.attributes("-fullscreen", not root.attributes("-fullscreen"))
+
+root.bind("<F11>", toggle_fullscreen)
+root.bind("<Escape>", lambda event: root.attributes("-fullscreen", False))
+
+# Logo toko 
+logo_path = Path(__file__).with_name("logo.png")
+if logo_path.exists():
+    logo_source = Image.open(logo_path)
+    logo_source.thumbnail((140, 140), Image.Resampling.LANCZOS)
+    logo_image = ImageTk.PhotoImage(logo_source)
+    logo_label = tk.Label(root, image=logo_image)
+    logo_label.pack(pady=(10, 0))
 
 # Judul Aplikasi
-title_label = tk.Label(root, text="MULTIMEDIA ART STORE CHECKOUT", font=("Arial", 12, "bold"))
+title_label = tk.Label(root, text="STORE CALCULATOR", font=("Arial", 12, "bold"))
 title_label.pack(pady=10)
 
 # Frame Input
